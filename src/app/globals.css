@@ -1,11 +1,33 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap');
 
 @theme {
+  /* Amazon's main navigation bar */
   --color-primary-background: #131921;
   --color-primary-foreground: #f0f2f2;
+  --color-foreground: #ffffff;
+  /* Amazon's secondary navigation */
   --color-accent-color: #232f3e;
+
+  /* Amazon's search box */
   --color-secondary-accent-color: #febd69;
+
+  /* Amazon's primary button (Add to Cart) */
+  --color-tertiary-accent-color: #ffd814;
+
+  /* Amazon's Buy Now button */
+  --color-dark-gold-color: #ffa41c;
+
+  /* Text colors */
   --color-light-text: #f0f2f2;
-  --color-muted-text: #e3e6e6;
+  --color-muted-text: #565959;
   --color-dark-text: #000000;
+
+  --font-open-sans: "Open Sans", sans-serif, 100;
+  /* Additional Amazon UI colors */
+  --color-amazon-bg: #eaeded;
+  --color-success-green: #007600;
+  --color-price-red: #B12704;
+  --color-link-blue: #007185;
+  --color-border-color: #DDD;
 }
