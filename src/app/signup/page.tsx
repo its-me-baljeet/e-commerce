@@ -1,45 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { handleSignup } from "@/utils/actions";
 import Image from "next/image";
-import { handleLogin } from "@/utils/actions";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 type ErrorObjType = {
     email?: string;
     password?: string;
     message?: string;
 }
-export default function LoginPage() {
+export default function SignupPage() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [errorObj, setErrorObj] = useState<ErrorObjType>({});
-    const router = useRouter();
 
     async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    const newErrorObj: ErrorObjType = {};
-    if (!email.trim()) {
-        newErrorObj.email = "Email is required.";
-    } else if (!/\S+@\S+\.\S+/.test(email)) {
-        newErrorObj.email = "Please enter a valid email address.";
-    }
+        e.preventDefault();
+        const newErrorObj: ErrorObjType = {};
+        if (!email.trim()) {
+            newErrorObj.email = "Email is required.";
+        } else if (!/\S+@\S+\.\S+/.test(email)) {
+            newErrorObj.email = "Please enter a valid email address.";
+        }
 
-    if (password.trim().length < 6) {
-        newErrorObj.password = "Password must contain at least 6 characters!";
-    }
-    if (Object.keys(newErrorObj).length > 0) {
-        setErrorObj(newErrorObj);
-        return;
-    }
-        const resp = await handleLogin({ email, password });
+        if (password.trim().length < 6) {
+            newErrorObj.password = "Password must contain at least 6 characters!";
+        }
+        if (Object.keys(newErrorObj).length > 0) {
+            setErrorObj(newErrorObj);
+            return;
+        }
+        const resp = await handleSignup({ email, password });
         if (!resp.success) {
             setErrorObj({ message: resp.message });
-        }else{
-            router.push("/");
         }
-}
+    }
 
     return (
         <main className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
@@ -48,7 +44,7 @@ export default function LoginPage() {
             </div>
 
             <div className="bg-white w-full max-w-md rounded border border-gray-300 p-6">
-                <h1 className="text-2xl font-medium mb-4">Sign-In</h1>
+                <h1 className="text-2xl font-medium mb-4">Register</h1>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
@@ -77,7 +73,7 @@ export default function LoginPage() {
                             className="w-full mt-1 border border-gray-400 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-500"
                         />
                         {errorObj.password && <p className="text-red-500 text-xs mt-1">{errorObj.password}</p>}
-{errorObj.message && <p className="text-red-500 text-xs text-center">{errorObj.message}</p>}
+                        {errorObj.message && <p className="text-red-500 text-xs text-center">{errorObj.message}</p>}
                     </div>
 
                     <button
@@ -102,11 +98,11 @@ export default function LoginPage() {
             </div>
 
             <div className="mt-8 text-sm text-gray-600">
-                New to Amazon?{" "}
-                <Link href={"/signup"}>
-                <span className="text-blue-600 cursor-pointer hover:underline">
-                    Create your Amazon account
-                </span>
+                Already have an Amazon account?{" "}
+                <Link href={"/login"}>
+                    <span className="text-blue-600 cursor-pointer hover:underline">
+                        Login to your Amazon account
+                    </span>
                 </Link>
             </div>
         </main>

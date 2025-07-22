@@ -5,7 +5,7 @@ import { Suspense } from "react";
 
 export default function Home() {
   return (
-    <main className="w-full min-h-() flex flex-col items-center bg-amazon-bg gap-5">
+    <main className="w-full min-h-(calc(100vh-60px)) flex flex-col items-center bg-amazon-bg gap-5">
       <Suspense fallback={
         <div className="min-h-full p-5">
           <h1>Loading...</h1>
@@ -21,12 +21,12 @@ export async function ProductsSection() {
   return (
     <div className="h-full w-full relative bg-black">
       <Carousel />
-      <section className="absolute top-44 z-20 w-full grid grid-cols-4 gap-5 px-5">
+      <section className="absolute top-44 z-20 w-full grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 px-5">
         {
           products.map(product => {
             return (
-              <div>
-                <ProductCard key={product.id} productData={product} />
+              <div key={product.id}>
+                <ProductCard productData={product} />
               </div>
             )
 

@@ -1,18 +1,19 @@
 'use client'
 import { ProductObj } from "@/types";
+import { handleLogout } from "@/utils/actions";
 import { getProductsData } from "@/utils/api";
+import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
-import { ChangeEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
-import { IoSearchSharp } from "react-icons/io5";
 import { LuShoppingCart } from "react-icons/lu";
 import { RxHamburgerMenu } from "react-icons/rx";
 
 export default function Header() {
     const [userInput, setUserInput] = useState("");
     const [suggestions, setSuggestions] = useState<ProductObj[]>([]);
-    const [products, setProducts] = useState<ProductObj[]>([]);
+    const [products, setProducts] = useState<ProductObj[]>([]);     
     useEffect(() => {
         async function getProductsList() {
             const list = await getProductsData();
@@ -27,9 +28,9 @@ export default function Header() {
     }, [userInput])
     return (
         <header>
-            <nav className="w-full h-15 flex justify-between items-center px-5 border-b border-gray-600 bg-primary-background text-light-text">
+            <nav className="w-full h-15 flex justify-between gap-5 items-center px-5 border-b border-gray-600 bg-primary-background text-light-text">
                 <Link href={"/"} className="relative h-8 w-25">
-                    <Image src={"/amazon.png"} fill alt="logo" />
+                    <Image src={"/amazon.png"} fill alt="logo" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw" priority={true} />
                 </Link>
                 <form action="/search"
                     method="GET"
@@ -43,9 +44,7 @@ export default function Header() {
                     </button>
                 </form>
                 <div className="flex gap-5">
-                    <Link href={"/login"}>
-                        <button>Login</button>
-                    </Link>
+                        <button className="cursor-pointer" onClick={handleLogout}>Logout</button>
                     <Link href={"/cart"}>
                         <button className="cursor-pointer">
                             <LuShoppingCart size={25} />
@@ -53,8 +52,8 @@ export default function Header() {
                     </Link>
                 </div>
             </nav>
-            <nav className="w-full h-8 bg-accent-color text-light-text flex items-center px-5 text-sm font-medium">
-                <ul className="w-full flex gap-4">
+            <nav className="w-full h-8 bg-accent-color text-light-text flex items-center px-5 text-sm font-medium overflow-scroll scrollbar-hide">
+                <ul className="w-screen flex gap-4  whitespace-nowrap">
                     <li className="flex items-center font-bold gap-1">
                         <RxHamburgerMenu />
                         All</li>

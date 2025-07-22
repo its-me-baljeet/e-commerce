@@ -14,3 +14,8 @@ export interface ProductObj {
 export type CartItem = ProductObj & {
     quantity: number;
 };
+
+export type UserDetails = {
+    email: string;
+    password: string;
+}

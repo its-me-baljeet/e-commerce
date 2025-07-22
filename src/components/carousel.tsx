@@ -25,12 +25,13 @@ export default function Carousel() {
     }, []);
 
     return (
-        <div className="relative h-96 w-full overflow-hidden">
+        <div className="relative min-h-96 min-w-full overflow-hidden">
             <Image
                 key={images[currentIndex]}
                 src={images[currentIndex]}
                 alt="Carousel"
-                fill
+                priority={currentIndex === 0}
+                fill={true}
                 className="transition-all duration-700"
             />
             <div className="absolute bottom-0 left-0 w-full h-24 bg-gradient-to-t from-white to-transparent z-10 pointer-events-none" />

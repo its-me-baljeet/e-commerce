@@ -46,7 +46,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                 <h2 className="text-lg font-semibold">Showing results for: <span className="text-blue-600">{query}</span></h2>
                 <SortBy />
             </section>
-            <section className="w-full grid grid-cols-4 gap-4">
+            <section className="w-full grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {
                     results.length > 0
                         ? results.map(product =>
