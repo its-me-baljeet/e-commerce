@@ -8,14 +8,14 @@ type ProductCardProps = {
     productData: ProductObj;
 }
 export default function ProductCard({ productData }: ProductCardProps) {
-    const { id, title, description, rating, price, thumbnail, category } = productData;
+    const { id, title, description, price,  category } = productData;
 
     return (
 
         <div className="w-full min-h-96 border border-gray-200 flex flex-col gap-2 tracking-wide bg-foreground rounded-sm shadow-sm">
             <Link href={`/products/${id}`}>
                 <div className="relative min-w-60 min-h-72 bg-gray-500/5">
-                    <Image src={thumbnail} fill={true} alt="Image" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw" />
+                    {/* <Image src={thumbnail} fill={true} alt="Image" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw" /> */}
                 </div>
             </Link>
             <div className="px-2 pb-4 flex flex-col gap-2">
@@ -24,7 +24,7 @@ export default function ProductCard({ productData }: ProductCardProps) {
                     <h2 className="font-semibold">{title}</h2>
                 </Link>
                 <p className="text-muted-text">{description}</p>
-                <RenderStars rating={rating} />
+                {/* <RenderStars rating={rating} /> */}
                 <Link href={`/products/${id}`}>
                     <p className="font-semibold text-lg">${price}</p>
                 </Link>

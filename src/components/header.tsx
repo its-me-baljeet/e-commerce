@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { IoIosSearch } from "react-icons/io";
 import { LuShoppingCart } from "react-icons/lu";
 import { RxHamburgerMenu } from "react-icons/rx";
+import AddProductDialog from "./addProductDialog";
 
 export default function Header() {
     const [userInput, setUserInput] = useState("");
@@ -44,6 +45,7 @@ export default function Header() {
                     </button>
                 </form>
                 <div className="flex gap-5">
+                    <AddProductDialog/>
                         <button className="cursor-pointer" onClick={handleLogout}>Logout</button>
                     <Link href={"/cart"}>
                         <button className="cursor-pointer">

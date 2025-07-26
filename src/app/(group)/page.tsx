@@ -1,6 +1,6 @@
 import Carousel from "@/components/carousel";
 import ProductCard from "@/components/productCard";
-import { getProductsData } from "@/utils/api";
+import prismaClient from "@/services/prisma";
 import { Suspense } from "react";
 
 export default function Home() {
@@ -17,7 +17,11 @@ export default function Home() {
   );
 }
 export async function ProductsSection() {
-  const products = await getProductsData();
+  const products = await prismaClient.product.findMany();
+  if(!products.length){
+    return <p>No products found!</p>
+  }
+  console.log("data",products)
   return (
     <div className="h-full w-full relative bg-black">
       <Carousel />
@@ -29,7 +33,6 @@ export async function ProductsSection() {
                 <ProductCard productData={product} />
               </div>
             )
-
           })
         }
       </section>

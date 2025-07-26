@@ -1,15 +1,11 @@
 export interface ProductObj {
-    id: number;
-    title: string;
-    description: string;
-    price: number;
-    discountPercentage: number;
-    rating: number;
-    stock: number;
-    brand: string;
-    category: string;
-    thumbnail: string;
-    images: string[];
+  id: string;
+  title: string;
+  description: string;
+  category: string;
+  price: number;
+  discountPercentage: number | null;
+  images?: string[];
 }
 export type CartItem = ProductObj & {
     quantity: number;
