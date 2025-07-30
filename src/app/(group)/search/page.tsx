@@ -1,5 +1,6 @@
 import ProductCard from "@/components/productCard";
 import SortBy from "@/components/sortBy";
+import prismaClient from "@/services/prisma";
 import { getSearchProductsData } from "@/utils/api";
 
 type SearchPageProps = {
@@ -26,12 +27,20 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     const max = parseInt(searchParams.max || "999999");
     const rating = parseInt(searchParams.minRating || "1");
     const sortBy = searchParams.sortBy || "";
-    const products = await getSearchProductsData(query);
+    const products = await prismaClient.product.findMany({
+        where:{
+            title: {
+                contains: query,
+                mode: "insensitive"
+            }
+        }
+    });
     let results = [...products].filter(product => {
         const matchesPrice = product.price >= min && product.price <= max;
-        const matchesRating = product.rating >= rating;
+        // const matchesRating = product.rating >= rating;
 
-        return matchesPrice && matchesRating;
+        // return matchesPrice && matchesRating;
+        return matchesPrice;
     });
 
     if (sortBy === "low") {

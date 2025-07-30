@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { IoSearchSharp } from "react-icons/io5";
-import { getProductsData } from "@/utils/api";
 import { ProductObj } from "@/types";
 
 let debounceTimer: NodeJS.Timeout;

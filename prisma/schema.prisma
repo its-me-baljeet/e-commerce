@@ -24,3 +24,12 @@ model Product {
   thumbnail          String
   images             String[]
 }
+
+model Cart {
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
+  description String
+  price       Float
+  thumbnail   String
+  quantity    Int
+}

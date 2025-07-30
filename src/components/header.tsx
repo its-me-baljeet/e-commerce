@@ -1,7 +1,6 @@
 'use client'
 import { ProductObj } from "@/types";
-import { handleLogout } from "@/utils/actions";
-import { getProductsData } from "@/utils/api";
+import { getAllProducts, handleLogout } from "@/utils/actions";
 import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
@@ -10,15 +9,17 @@ import { IoIosSearch } from "react-icons/io";
 import { LuShoppingCart } from "react-icons/lu";
 import { RxHamburgerMenu } from "react-icons/rx";
 import AddProductDialog from "./addProductDialog";
+import prismaClient from "@/services/prisma";
 
 export default function Header() {
     const [userInput, setUserInput] = useState("");
     const [suggestions, setSuggestions] = useState<ProductObj[]>([]);
-    const [products, setProducts] = useState<ProductObj[]>([]);     
+    const [products, setProducts] = useState<ProductObj[]>([]) ;     
     useEffect(() => {
         async function getProductsList() {
-            const list = await getProductsData();
-            if (list) setProducts(list);
+            const list = await getAllProducts();
+            if(!list.success)return;
+            if (list.success) setProducts(list.data||[]);
         }
         getProductsList();
     }, [])

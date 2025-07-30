@@ -5,7 +5,16 @@ export interface ProductObj {
   category: string;
   price: number;
   discountPercentage: number | null;
+  thumbnail: string;
   images?: string[];
+}
+export type CartObj = {
+  id: string;
+  title: string;
+  description: string;
+  price: number;
+  thumbnail: string;
+  quantity: number;
 }
 export type CartItem = ProductObj & {
     quantity: number;

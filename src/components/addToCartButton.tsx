@@ -1,32 +1,44 @@
 'use client';
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { CartItem, ProductObj } from "@/types";
+import { CartContext } from "@/context/cartContext";
+import { addProductToCart } from "@/utils/actions";
+import { toast } from "sonner";
 
 type AddToCartButtonProps = {
     productData: ProductObj;
 };
 
 export default function AddToCartButton({ productData }: AddToCartButtonProps) {
-    const [label, setLabel] = useState("Add to cart");
+    const cartItem = {
+        id: productData.id,
+        title: productData.title,
+        description: productData.description,
+        price: productData.price,
+        thumbnail: productData.thumbnail,
+        quantity: 1,
+    }
+    const [existing, setExisting] = useState(false);
 
-    function handleAdd() {
-        const stored = localStorage.getItem("cart");
-        const prevItems: CartItem[] = stored ? JSON.parse(stored) : [];
+    const context = useContext(CartContext);
+    if (!context) {
+        throw new Error("AddToCartButton must be used within a CartContext.Provider");
+    }
 
-        const existingIndex = prevItems.findIndex(item => item.id === productData.id);
+    const { cart, setCart } = context;
 
-        let updatedItems: CartItem[];
-
-        if (existingIndex !== -1) {
-            updatedItems = [...prevItems];
-            updatedItems[existingIndex].quantity += 1;
+    async function handleAdd() {
+        const updatedCartItems = [...cart];
+        updatedCartItems.push(cartItem);
+        setCart(updatedCartItems);
+        const resp = await addProductToCart(cartItem);
+        if (resp.success) {
+            setExisting(true);
         } else {
-            updatedItems = [...prevItems, { ...productData, quantity: 1 }];
+            toast.error(resp.message);
+            return;
         }
-
-        localStorage.setItem("cart", JSON.stringify(updatedItems));
-        setLabel("Item added to cart");
     }
 
     return (
@@ -34,7 +46,9 @@ export default function AddToCartButton({ productData }: AddToCartButtonProps) {
             className="w-fit bg-tertiary-accent-color px-4 py-2 rounded-full text-sm cursor-pointer hover:opacity-90 transition"
             onClick={handleAdd}
         >
-            {label}
+            {
+                existing ? "added to cart" : "add to cart"
+            }
         </div>
     );
 }

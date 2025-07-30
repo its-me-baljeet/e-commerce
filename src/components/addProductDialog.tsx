@@ -15,8 +15,9 @@ export default function AddProductDialog() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [price, setPrice] = useState(0);
-  const [imgUrl, setImgUrl] = useState("");
+  const [thumbnail, setThumbnail]= useState("");
   const [category, setCategory] = useState("");
+  const [discountPercentage, setDiscountPercentage] = useState(0);
 
   // 3. Correct the event type to React.FormEvent
   async function handleSubmit(e: React.FormEvent) {
@@ -25,8 +26,9 @@ export default function AddProductDialog() {
       title,
       description,
       price,
-      imgUrl,
-      category
+      thumbnail,
+      category,
+      discountPercentage,
     }
     console.log(await addProductToDB(data));
     
@@ -61,8 +63,12 @@ export default function AddProductDialog() {
               <Input id="price" type="number" value={price} onChange={e => setPrice(Number(e.target.value))} />
             </div>
             <div className="grid gap-3">
+              <Label htmlFor="price">Discount %</Label>
+              <Input id="discount" type="number" value={discountPercentage} onChange={e => setDiscountPercentage(Number(e.target.value))} />
+            </div>
+            <div className="grid gap-3">
               <Label htmlFor="img">Image URL</Label>
-              <Input id="img" value={imgUrl} onChange={e => setImgUrl(e.target.value)} />
+              <Input id="img" value={thumbnail} onChange={e => setThumbnail(e.target.value)} />
             </div>
             <div className="grid gap-3">
               <Label htmlFor="category">Category</Label>

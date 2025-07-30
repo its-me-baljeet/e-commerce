@@ -1,31 +1,49 @@
 'use client'
 
-import { CartItem } from "@/types";
+import { CartItem, CartObj } from "@/types";
+import { deleteCartItem, getCartItems, updateCartItemQuantity } from "@/utils/actions";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export default function CartPage() {
-    const [productsArr, setProductsArr] = useState<CartItem[]>([]);
+    const [productsArr, setProductsArr] = useState<CartObj[]>([]);
     const subtotal = productsArr.reduce((acc, item) => acc + item.price * item.quantity, 0);
     const totalItems = productsArr.reduce((acc, item) => acc + item.quantity, 0);
 
     useEffect(() => {
-        const getItems = localStorage.getItem("cart");
-        const products = getItems ? JSON.parse(getItems) : [];
-        console.log(products)
-        setProductsArr(products);
+        async function getCartProducts(){
+            const resp = await getCartItems();
+            if(!resp.success){
+                toast.error(resp.message);
+                return;
+            }else{
+                setProductsArr(resp.data??[]);
+            }
+        }
+        getCartProducts();
     }, [])
-    const handleDelete = (id: number) => {
-        const updated = productsArr.filter(product => product.id !== id);
-        setProductsArr(updated);
-        localStorage.setItem("cart", JSON.stringify(updated));
+    const handleDelete = async(id: string) => {
+        const updatedArr = productsArr.filter(product => product.id !== id);
+        setProductsArr(updatedArr);
+        const resp = await deleteCartItem(id);
+        if(!resp.success){
+            toast.error(resp.message);
+            return;
+        }
+        toast.success(resp.message);
     };
-    const handleQuantityChange = (id: number, quantity: number) => {
+    const handleQuantityChange = async (id: string, quantity: number) => {
         const updated = productsArr.map(item =>
             item.id === id ? { ...item, quantity } : item
         );
         setProductsArr(updated);
-        localStorage.setItem("cart", JSON.stringify(updated));
+        const resp = await updateCartItemQuantity(id, quantity);
+        if(!resp.success){
+            toast.error(resp.message);
+            return;
+        }
+        toast.success(resp.message);
     };
 
 
@@ -33,8 +51,8 @@ export default function CartPage() {
         return (
             <main className="min-h-[70vh] flex items-center justify-center bg-amazon-bg p-10">
                 <div className="text-center space-y-4 bg-white p-10 rounded shadow-sm">
-                    <h2 className="text-2xl font-semibold">Your Amazon Cart is empty</h2>
-                    <p className="text-sm text-[--color-muted-text]">Check your saved items or browse for more products.</p>
+                    <h2 className="text-2xl font-semibold text-black">Your Amazon Cart is empty</h2>
+                    <p className="text-sm text-muted">Check your saved items or browse for more products.</p>
                     <button className="bg-secondary-accent-color hover:bg-dark-gold-color text-dark-text py-2 px-4 rounded-full font-medium">
                         Continue Shopping
                     </button>
@@ -48,7 +66,7 @@ export default function CartPage() {
             <section className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-4">
                 {/* Main Cart Section */}
                 <section className="lg:col-span-3 bg-white rounded p-4 shadow-sm flex flex-col gap-5">
-                    <div className="flex justify-between items-center border-b-2 border-amazon-bg pb-2 mb-4">
+                    <div className="flex justify-between items-center border-b-2 border-amazon-bg pb-2 mb-4 text-black">
                         <h1 className="text-2xl font-semibold">Shopping Cart</h1>
                         <span className="text-[--color-muted-text] text-sm">Price</span>
                     </div>
@@ -57,9 +75,9 @@ export default function CartPage() {
                         {
                             productsArr.map(product => {
                                 return (
-                                    <li key={product.id} className="flex flex-col md:flex-row gap-4 border-b-2 border-amazon-bg pb-4">
+                                    <li key={product.id} className="flex flex-col md:flex-row gap-4 border-b-2 border-amazon-bg pb-4 text-black">
                                         <div className="relative w-28 h-28">
-                                            <Image src={product.thumbnail} fill={true} alt="product Imgae" />
+                                            <Image src={product.thumbnail} fill={true} alt="product Imgae" sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"/>
                                         </div>
                                         <div className="flex-1 flex flex-col md:flex-row justify-between">
                                             <div className="space-y-1 flex-1">
@@ -113,7 +131,7 @@ export default function CartPage() {
                 </section>
 
                 {/* Checkout Card */}
-                <aside className="lg:col-span-1">
+                <aside className="lg:col-span-1 text-black">
                     <div className="bg-white rounded p-4 shadow-sm">
                         <div className="mb-2">
                             <p className="text-[--color-success-green] text-sm flex items-start">

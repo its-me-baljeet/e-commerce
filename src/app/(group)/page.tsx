@@ -1,5 +1,5 @@
 import Carousel from "@/components/carousel";
-import ProductCard from "@/components/productCard";
+import HomePageProducts from "@/components/home/homePageProducts";
 import prismaClient from "@/services/prisma";
 import { Suspense } from "react";
 
@@ -17,25 +17,16 @@ export default function Home() {
   );
 }
 export async function ProductsSection() {
+
   const products = await prismaClient.product.findMany();
-  if(!products.length){
+  if (!products.length) {
     return <p>No products found!</p>
   }
-  console.log("data",products)
+  // console.log("data", products)
   return (
     <div className="h-full w-full relative bg-black">
       <Carousel />
-      <section className="absolute top-44 z-20 w-full grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 px-5">
-        {
-          products.map(product => {
-            return (
-              <div key={product.id}>
-                <ProductCard productData={product} />
-              </div>
-            )
-          })
-        }
-      </section>
+      <HomePageProducts initialProds={products}/>
     </div>
   )
 }
